@@ -878,6 +878,6 @@ retry delaysSeconds io = loop delaysSeconds
       loop delays
 
 dieW :: (Exception e) => IO (Either e a) -> IO a
-dieW x = do
-  res <- retry [0.1, 0.2, 0.5, 1, 3, 10, 60] x
+dieW x = retry [0.0, 0.1, 0.5] $ do
+  res <- x
   either throwIO pure res
