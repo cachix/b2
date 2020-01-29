@@ -876,10 +876,7 @@ retry delaysSeconds io = loop delaysSeconds
       liftIO $ threadDelay (floor $ delay * 1000 * 1000)
       loop delays
 
-retryThreeTimes :: IO a -> IO a
-retryThreeTimes = retry [0.1, 0.3, 0.5]
-
 dieW :: (Exception e) => IO (Either e a) -> IO a
-dieW x = retryThreeTimes $ do
-  res <- x
+dieW x = do
+  res <- retry [0.1, 0.2, 0.5, 1, 3, 10, 60] x
   either throwIO pure res
