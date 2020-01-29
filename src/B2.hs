@@ -872,8 +872,9 @@ retry ::
 retry delaysSeconds io = loop delaysSeconds
   where
     loop [] = io
-    loop (delay : delays) = catch io $ \(_ :: SomeException) -> do
+    loop (delay : delays) = catch io $ \(exc :: SomeException) -> do
       liftIO $ threadDelay (floor $ delay * 1000 * 1000)
+      putStrLn $ "retrying on " <> show exc
       loop delays
 
 dieW :: (Exception e) => IO (Either e a) -> IO a
